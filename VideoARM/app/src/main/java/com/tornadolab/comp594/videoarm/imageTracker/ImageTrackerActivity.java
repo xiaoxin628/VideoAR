@@ -38,7 +38,6 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		trackerManager.addTrackerData("ImageTarget/door_far.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/door.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/blue_door_cut.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/blue_door_far.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/cube.2dmap", true);
 		trackerManager.loadTrackerData();
 
