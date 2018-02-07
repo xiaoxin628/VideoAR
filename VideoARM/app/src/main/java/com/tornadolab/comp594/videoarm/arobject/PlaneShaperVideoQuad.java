@@ -35,7 +35,7 @@ public class PlaneShaperVideoQuad extends BaseModel {
                     "{\n" +
                     "	vec4 tex = texture2D(u_texture, v_texCoord);\n" +
                     "   gl_FragColor = tex; \n" +
-                    "   if((tex.g > tex.r * 1.1) && (tex.g > tex.b * 1.1) && (tex.g > 0.2)) \n" +
+                    "   if((tex.g > tex.r * 1.1) && (tex.g > tex.b * 1.1) && (tex.g > 0.5)) \n" +
                     "   {\n" +
                     "       gl_FragColor.a = 0.0; \n" +
                     "   } \n" +

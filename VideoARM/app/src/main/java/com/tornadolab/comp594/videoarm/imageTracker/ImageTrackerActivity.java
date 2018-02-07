@@ -39,6 +39,14 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		trackerManager.addTrackerData("ImageTarget/door.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/blue_door_cut.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/cube.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/door_chinese_garden.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/door_cg_2.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/door_cg_3.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/cb_square.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_1.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_2.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_3.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_4.2dmap", true);
 		trackerManager.loadTrackerData();
 
 		preferCameraResolution = getSharedPreferences(SampleUtil.PREF_NAME, Activity.MODE_PRIVATE).getInt(SampleUtil.PREF_KEY_CAM_RESOLUTION, 0);

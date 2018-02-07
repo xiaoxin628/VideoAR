@@ -109,6 +109,9 @@ class ImageTrackerRenderer implements Renderer {
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		for (int i = 0; i < trackingResult.getCount(); i++) {
 			Trackable trackable = trackingResult.getTrackable(i);
+
+//			Log.d(TAG, trackable.getName());
+
 			if (trackable.getName().equals("door_far") ) {
 				legoDetected = true;
 				if (videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||
@@ -124,7 +127,7 @@ class ImageTrackerRenderer implements Renderer {
 						1.0f
 				);
 				videoQuad.draw();
-			} else if (trackable.getName().equals("blue_door_cut")) {
+			} else if (trackable.getName().startsWith("solide_circle")) {
 
 				legoDetected = true;
 				if (mShaperVideoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||
@@ -141,7 +144,7 @@ class ImageTrackerRenderer implements Renderer {
 				);
 				mShaperVideoQuad.draw();
 
-			} else if (trackable.getName().equals("cube")) {
+			} else if (trackable.getName().equals("cb_square")) {
 
                 legoDetected = true;
                 if (mCubeVideoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||

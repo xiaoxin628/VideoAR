@@ -114,7 +114,9 @@ class InstantTrackerRenderer implements Renderer {
 		mVideoQuad = new PlaneShaperVideoQuad();
 		VideoPlayer player = new VideoPlayer(activity);
 		mVideoQuad.setVideoPlayer(player);
-		player.openVideo("movies/man_talk.mp4");
+//		player.openVideo("movies/stitch_walk.mp4");
+//		player.openVideo("movies/IMG_0106.mp4");
+		player.openVideo("movies/IMG_0105.mp4");
 	}
 
 	void setOrientation(int orientation) {
