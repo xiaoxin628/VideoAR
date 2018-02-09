@@ -94,6 +94,13 @@ int main(int argc, char **argv)
                                cv::Size(video.get(CV_CAP_PROP_FRAME_WIDTH),
                             		   video.get(CV_CAP_PROP_FRAME_HEIGHT)));
 
+    if (!output_cap.isOpened())
+    {
+        std::cout << "!!! Output video could not be opened" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+
 
     // Read first frame
     Mat frame;
@@ -166,11 +173,12 @@ int main(int argc, char **argv)
         	inverseMaskROI = cv::Scalar(0);
         	//Set the image to 0 in places where the mask is 1
         	inverseFill.setTo(cv::Scalar(0,255,0), inverseMask);
+
+        	//save the frame
+        	output_cap.write(inverseFill);
         imshow("Tracking", inverseFill);
-
-
     }
-
+    output_cap.release();
 }
 
 void saveVideo(char* videoFilename){
