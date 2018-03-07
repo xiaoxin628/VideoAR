@@ -116,7 +116,8 @@ class InstantTrackerRenderer implements Renderer {
 		mVideoQuad.setVideoPlayer(player);
 //		player.openVideo("movies/stitch_walk.mp4");
 //		player.openVideo("movies/IMG_0106.mp4");
-		player.openVideo("movies/IMG_0105.mp4");
+//		player.openVideo("movies/IMG_0105.mp4");
+		player.openVideo("movies/demo_me_walking_output.mp4");
 	}
 
 	void setOrientation(int orientation) {
