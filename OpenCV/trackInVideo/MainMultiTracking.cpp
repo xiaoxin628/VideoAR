@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
 
 		// show image with the tracked object
 		imshow("tracker", frame);
-
+		output_cap.write(frame);
 		//quit on ESC button
 		if (waitKey(1) == 27)
 			break;

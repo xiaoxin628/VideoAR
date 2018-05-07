@@ -47,7 +47,16 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_2.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_3.2dmap", true);
 		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_4.2dmap", true);
+//		trackerManager.addTrackerData("ImageTarget/matche_box.2dmap", true);
+		//black and white colour
+		trackerManager.addTrackerData("ImageTarget/matche_box_bw.2dmap", true);
+
+		trackerManager.addTrackerData("ImageTarget/blender_big.2dmap", true);
+		trackerManager.addTrackerData("ImageTarget/matchbox_side.2dmap", true);
+
+		trackerManager.addTrackerData("ImageTarget/cap_circle.2dmap", true);
 		trackerManager.loadTrackerData();
+		trackerManager.setTrackingOption(TrackerManager.TrackingOption.EXTENDED_TRACKING);
 
 		preferCameraResolution = getSharedPreferences(SampleUtil.PREF_NAME, Activity.MODE_PRIVATE).getInt(SampleUtil.PREF_KEY_CAM_RESOLUTION, 0);
 	}

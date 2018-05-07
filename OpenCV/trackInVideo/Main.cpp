@@ -77,8 +77,8 @@
 //    }
 //    #endif
 //    // Read video
-////    VideoCapture video("../demo.mp4");
-//    VideoCapture video("../demo_me_walking.mp4");
+//    VideoCapture video("../demo.mp4");
+////    VideoCapture video("../demo_me_walking.mp4");
 //
 //    // Exit if video is not opened
 //    if(!video.isOpened())
@@ -91,8 +91,8 @@
 //    // Setup output video
 //    //VID_20180216_124424.mp4
 //    //demo_out.mp4
-////    cv::VideoWriter output_cap("../demo.mp4",
-//    	    cv::VideoWriter output_cap("../demo_me_walking_out.mp4",
+//    cv::VideoWriter output_cap("../demo_out.mp4",
+////    	    cv::VideoWriter output_cap("../demo_me_walking_out.mp4",
 //    		video.get(CV_CAP_PROP_FOURCC),
 //			video.get(CV_CAP_PROP_FPS),
 //                               cv::Size(video.get(CV_CAP_PROP_FRAME_WIDTH),

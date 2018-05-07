@@ -65,23 +65,23 @@ class ImageTrackerRenderer implements Renderer {
 		videoQuad = new VideoQuad();
 		VideoPlayer player = new VideoPlayer(activity);
 		videoQuad.setVideoPlayer(player);
-		player.openVideo("movies/bag_end.mp4");
+		player.openVideo("movies/demo.mp4");
 
 
 		mShaperVideoQuad = new ShaperVideoQuad();
 		player = new VideoPlayer(activity);
 		mShaperVideoQuad.setVideoPlayer(player);
-		player.openVideo("movies/bag_end.mp4");
+		player.openVideo("movies/demo.mp4");
 
         mCubeVideoQuad = new CubeVideoQuad();
         player = new VideoPlayer(activity);
         mCubeVideoQuad.setVideoPlayer(player);
-        player.openVideo("movies/bag_end.mp4");
+        player.openVideo("movies/demo.mp4");
 
 		chromaKeyVideoQuad = new ChromaKeyVideoQuad();
 		player = new VideoPlayer(activity);
 		chromaKeyVideoQuad.setVideoPlayer(player);
-		player.openVideo("movies/processed_video.mp4");
+		player.openVideo("movies/bg_sub.mp4");
 	}
 
 	@Override
@@ -110,9 +110,9 @@ class ImageTrackerRenderer implements Renderer {
 		for (int i = 0; i < trackingResult.getCount(); i++) {
 			Trackable trackable = trackingResult.getTrackable(i);
 
-//			Log.d(TAG, trackable.getName());
+			Log.d(TAG, "trackable Name:"+trackable.getName());
 
-			if (trackable.getName().equals("door_far") ) {
+			if (trackable.getName().startsWith("matche_box") || trackable.getName().startsWith("blender_big") || trackable.getName().startsWith("matchbox_side")) {
 				legoDetected = true;
 				if (videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||
 						videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_PAUSE) {
@@ -127,7 +127,7 @@ class ImageTrackerRenderer implements Renderer {
 						1.0f
 				);
 				videoQuad.draw();
-			} else if (trackable.getName().startsWith("solide_circle")) {
+			} else if (trackable.getName().startsWith("solide_circle") || trackable.getName().startsWith("cap_circle")) {
 
 				legoDetected = true;
 				if (mShaperVideoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||
@@ -139,7 +139,7 @@ class ImageTrackerRenderer implements Renderer {
 				mShaperVideoQuad.setTranslate(0.0f, 0.0f, 0.0f);
 				mShaperVideoQuad.setScale(
 						1.0f,
-						-0.560f,
+						1.0f, // this fix olive shape
 						1.0f
 				);
 				mShaperVideoQuad.draw();

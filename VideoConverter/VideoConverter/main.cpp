@@ -150,7 +150,7 @@ void processTansVideo(char* videoFilename){
     
     
     // Setup output video
-    cv::VideoWriter output_cap("/Users/will/Sites/University/comp594/VideoConverter/out.mp4",
+    cv::VideoWriter output_cap("./out.mp4",
                                cap.get(CV_CAP_PROP_FOURCC),
                                cap.get(CV_CAP_PROP_FPS),
                                cv::Size(cap.get(CV_CAP_PROP_FRAME_WIDTH),
