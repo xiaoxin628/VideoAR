@@ -9,6 +9,7 @@ import android.opengl.Matrix;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
+
 public abstract class BaseModel {
 
 	float[] localMvpMatrix = new float[16];

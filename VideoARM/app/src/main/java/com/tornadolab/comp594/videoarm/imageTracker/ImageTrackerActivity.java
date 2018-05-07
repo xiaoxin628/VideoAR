@@ -8,7 +8,11 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import com.maxst.ar.CameraDevice;
+import com.maxst.ar.MaxstAR;
+import com.maxst.ar.ResultCode;
 import com.maxst.ar.TrackerManager;
 import com.tornadolab.comp594.videoarm.activities.ARActivity;
 import com.tornadolab.comp594.videoarm.R;
@@ -18,6 +22,7 @@ import com.tornadolab.comp594.videoarm.util.SampleUtil;
 public class ImageTrackerActivity extends ARActivity implements View.OnClickListener {
 
 	private ImageTrackerRenderer imageTargetRenderer;
+	private GLSurfaceView glSurfaceView;
 	private int preferCameraResolution = 0;
 
 	@Override
@@ -35,28 +40,28 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		imageTargetRenderer = new ImageTrackerRenderer(this);
 		glSurfaceView.setRenderer(imageTargetRenderer);
 
-		trackerManager.addTrackerData("ImageTarget/door_far.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/door.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/blue_door_cut.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/cube.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/door_chinese_garden.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/door_cg_2.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/door_cg_3.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/cb_square.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_1.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_2.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_3.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_4.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/door_far.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/door.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/blue_door_cut.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/cube.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/door_chinese_garden.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/door_cg_2.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/door_cg_3.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/cb_square.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_1.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_2.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_3.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/Hobbiton/MaxstAR\\Hobbiton\\solide_circle_4.2dmap", true);
 //		trackerManager.addTrackerData("ImageTarget/matche_box.2dmap", true);
 		//black and white colour
-		trackerManager.addTrackerData("ImageTarget/matche_box_bw.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/matche_box_bw.2dmap", true);
 
-		trackerManager.addTrackerData("ImageTarget/blender_big.2dmap", true);
-		trackerManager.addTrackerData("ImageTarget/matchbox_side.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/blender_big.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/matchbox_side.2dmap", true);
 
-		trackerManager.addTrackerData("ImageTarget/cap_circle.2dmap", true);
-		trackerManager.loadTrackerData();
-		trackerManager.setTrackingOption(TrackerManager.TrackingOption.EXTENDED_TRACKING);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/cap_circle.2dmap", true);
+		TrackerManager.getInstance().loadTrackerData();
+		TrackerManager.getInstance().setTrackingOption(TrackerManager.TrackingOption.EXTENDED_TRACKING);
 
 		preferCameraResolution = getSharedPreferences(SampleUtil.PREF_NAME, Activity.MODE_PRIVATE).getInt(SampleUtil.PREF_KEY_CAM_RESOLUTION, 0);
 	}
@@ -66,34 +71,47 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		super.onResume();
 
 		glSurfaceView.onResume();
-		trackerManager.startTracker(TrackerManager.TrackerMask.IMAGE_TRACKER);
-		cameraDevice.start(0, 1280, 720);
-//		switch (preferCameraResolution) {
-//			case 0:
-//				cameraDevice.start(0, 640, 480);
-//				break;
-//
-//			case 1:
-//				cameraDevice.start(0, 1280, 720);
-//				break;
-//		}
+		TrackerManager.getInstance().startTracker(TrackerManager.TRACKER_TYPE_IMAGE);
+
+		ResultCode resultCode = ResultCode.Success;
+		switch (preferCameraResolution) {
+			case 0:
+				resultCode = CameraDevice.getInstance().start(0, 640, 480);
+				break;
+
+			case 1:
+				resultCode = CameraDevice.getInstance().start(0, 1280, 720);
+				break;
+
+			case 2:
+				resultCode = CameraDevice.getInstance().start(0, 1920, 1080);
+				break;
+		}
+
+		if (resultCode != ResultCode.Success) {
+			Toast.makeText(this, R.string.camera_open_fail, Toast.LENGTH_SHORT).show();
+			finish();
+		}
+
+		MaxstAR.onResume();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+
 		glSurfaceView.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				backgroundRenderer.deinitRendering();
 				imageTargetRenderer.destroyVideoPlayer();
 			}
 		});
 
 		glSurfaceView.onPause();
 
-		trackerManager.stopTracker();
-		cameraDevice.stop();
+		TrackerManager.getInstance().stopTracker();
+		CameraDevice.getInstance().stop();
+		MaxstAR.onPause();
 	}
 
 	@Override

@@ -11,7 +11,11 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.maxst.ar.CameraDevice;
+import com.maxst.ar.MaxstAR;
+import com.maxst.ar.ResultCode;
 import com.maxst.ar.SensorDevice;
 import com.maxst.ar.TrackerManager;
 
@@ -21,9 +25,10 @@ import com.tornadolab.comp594.videoarm.util.SampleUtil;
 
 public class InstantTrackerActivity extends ARActivity implements View.OnTouchListener, View.OnClickListener {
 
-	private InstantTrackerRenderer instantImageTargetRenderer;
+	private InstantTrackerRenderer instantTargetRenderer;
 	private int preferCameraResolution = 0;
 	private Button startTrackingButton;
+	private GLSurfaceView glSurfaceView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +39,11 @@ public class InstantTrackerActivity extends ARActivity implements View.OnTouchLi
 		startTrackingButton = (Button) findViewById(R.id.start_tracking);
 		startTrackingButton.setOnClickListener(this);
 
+		instantTargetRenderer = new InstantTrackerRenderer(this);
 		glSurfaceView = (GLSurfaceView) findViewById(R.id.gl_surface_view);
 		glSurfaceView.setEGLContextClientVersion(2);
-		instantImageTargetRenderer = new InstantTrackerRenderer(this);
-		glSurfaceView.setRenderer(instantImageTargetRenderer);
+		glSurfaceView.setRenderer(instantTargetRenderer);
 		glSurfaceView.setOnTouchListener(this);
-
-		instantImageTargetRenderer.setOrientation(getResources().getConfiguration().orientation);
 
 		preferCameraResolution = getSharedPreferences(SampleUtil.PREF_NAME, Activity.MODE_PRIVATE).getInt(SampleUtil.PREF_KEY_CAM_RESOLUTION, 0);
 	}
@@ -51,42 +54,48 @@ public class InstantTrackerActivity extends ARActivity implements View.OnTouchLi
 
 		glSurfaceView.onResume();
 		SensorDevice.getInstance().start();
-		trackerManager.startTracker(TrackerManager.TrackerMask.INSTANT_TRACKER);
+		TrackerManager.getInstance().startTracker(TrackerManager.TRACKER_TYPE_INSTANT);
+
+		ResultCode resultCode = ResultCode.Success;
 
 		switch (preferCameraResolution) {
 			case 0:
-				cameraDevice.start(0, 640, 480);
+				resultCode = CameraDevice.getInstance().start(0, 640, 480);
 				break;
 
 			case 1:
-				cameraDevice.start(0, 1280, 720);
+				resultCode = CameraDevice.getInstance().start(0, 1280, 720);
+				break;
+
+			case 2:
+				resultCode = CameraDevice.getInstance().start(0, 1920, 1080);
 				break;
 		}
+
+		if (resultCode != ResultCode.Success) {
+			Toast.makeText(this, R.string.camera_open_fail, Toast.LENGTH_SHORT).show();
+			finish();
+		}
+
+		MaxstAR.onResume();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		glSurfaceView.queueEvent(new Runnable() {
-			@Override
-			public void run() {
-				backgroundRenderer.deinitRendering();
-                instantImageTargetRenderer.destroyVideoPlayer();
-			}
-		});
 		glSurfaceView.onPause();
 
-		trackerManager.stopTracker();
-		cameraDevice.stop();
+		TrackerManager.getInstance().quitFindingSurface();
+		TrackerManager.getInstance().stopTracker();
+		CameraDevice.getInstance().stop();
 		SensorDevice.getInstance().stop();
+
+		MaxstAR.onPause();
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-
-		instantImageTargetRenderer.setOrientation(newConfig.orientation);
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 	private static final float TOUCH_TOLERANCE = 5;
@@ -134,7 +143,7 @@ public class InstantTrackerActivity extends ARActivity implements View.OnTouchLi
 					float posX = world[0];
 					float posY = world[1];
 
-					instantImageTargetRenderer.setTranslate(posX - translationX, posY - translationY);
+					instantTargetRenderer.setTranslate(posX - translationX, posY - translationY);
 					translationX = posX;
 					translationY = posY;
 				}
@@ -155,7 +164,7 @@ public class InstantTrackerActivity extends ARActivity implements View.OnTouchLi
 				String text = startTrackingButton.getText().toString();
 				if (text.equals(getResources().getString(R.string.start_tracking))) {
 					TrackerManager.getInstance().findSurface();
-					instantImageTargetRenderer.resetPosition();
+					instantTargetRenderer.resetPosition();
 					startTrackingButton.setText(getResources().getString(R.string.stop_tracking));
 				} else {
 					TrackerManager.getInstance().quitFindingSurface();

@@ -9,23 +9,26 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
-import com.maxst.ar.BackgroundRenderer;
+
+import com.maxst.ar.CameraDevice;
+import com.maxst.ar.MaxstAR;
 import com.maxst.ar.MaxstARUtil;
 import com.maxst.ar.Trackable;
+import com.maxst.ar.TrackedImage;
 import com.maxst.ar.TrackerManager;
 import com.maxst.ar.TrackingResult;
+import com.maxst.ar.TrackingState;
+import com.tornadolab.comp594.videoarm.arobject.BackgroundCameraQuad;
 import com.tornadolab.comp594.videoarm.arobject.ChromaKeyVideoQuad;
 import com.tornadolab.comp594.videoarm.arobject.ColoredCube;
 import com.tornadolab.comp594.videoarm.arobject.CubeVideoQuad;
 import com.tornadolab.comp594.videoarm.arobject.ShaperVideoQuad;
 import com.tornadolab.comp594.videoarm.arobject.TexturedCube;
 import com.tornadolab.comp594.videoarm.arobject.VideoQuad;
-import com.tornadolab.comp594.videoarm.util.SampleRenderer;
 import com.maxst.videoplayer.VideoPlayer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 
 class ImageTrackerRenderer implements Renderer {
 
@@ -40,7 +43,7 @@ class ImageTrackerRenderer implements Renderer {
 
 	private int surfaceWidth;
 	private int surfaceHeight;
-	private SampleRenderer sampleRenderer;
+	private BackgroundCameraQuad backgroundCameraQuad;
 
 	private final Activity activity;
 
@@ -52,8 +55,7 @@ class ImageTrackerRenderer implements Renderer {
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		sampleRenderer = new SampleRenderer();
-		sampleRenderer.onSurfaceCreated();
+		backgroundCameraQuad = new BackgroundCameraQuad();
 
 //		Bitmap bitmap = MaxstARUtil.getBitmapFromAsset("MaxstAR_Cube.png", activity.getAssets());
 //
@@ -86,10 +88,10 @@ class ImageTrackerRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 unused, int width, int height) {
-		sampleRenderer.onSurfaceChanged(width, height);
-
 		surfaceWidth = width;
 		surfaceHeight = height;
+
+		MaxstAR.onSurfaceChanged(width, height);
 	}
 
 	@Override
@@ -97,14 +99,18 @@ class ImageTrackerRenderer implements Renderer {
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		GLES20.glViewport(0, 0, surfaceWidth, surfaceHeight);
 
-		TrackingResult trackingResult = TrackerManager.getInstance().getTrackingResult();
+		TrackingState state = TrackerManager.getInstance().updateTrackingState();
+		TrackingResult trackingResult = state.getTrackingResult();
 
-		sampleRenderer.onDrawFrame();
+		TrackedImage image = state.getImage();
+		float[] cameraProjectionMatrix = CameraDevice.getInstance().getBackgroundPlaneProjectionMatrix();
+		backgroundCameraQuad.setProjectionMatrix(cameraProjectionMatrix);
+		backgroundCameraQuad.draw(image);
 
 		boolean legoDetected = false;
 		boolean blocksDetected = false;
 
-		float[] projectionMatrix = BackgroundRenderer.getInstance().getProjectionMatrix();
+		float[] projectionMatrix = CameraDevice.getInstance().getProjectionMatrix();
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		for (int i = 0; i < trackingResult.getCount(); i++) {
@@ -184,12 +190,6 @@ class ImageTrackerRenderer implements Renderer {
 			}
 		}
 
-//		if (!legoDetected) {
-//			if (videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_PLAYING) {
-//				videoQuad.getVideoPlayer().pause();
-//			}
-//		}
-//
 //		if (!blocksDetected) {
 //			if (chromaKeyVideoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_PLAYING) {
 //				chromaKeyVideoQuad.getVideoPlayer().pause();
@@ -200,7 +200,5 @@ class ImageTrackerRenderer implements Renderer {
 	void destroyVideoPlayer() {
 		videoQuad.getVideoPlayer().destroy();
 		chromaKeyVideoQuad.getVideoPlayer().destroy();
-        mCubeVideoQuad.getVideoPlayer().destroy();
-        mShaperVideoQuad.getVideoPlayer().destroy();
 	}
 }

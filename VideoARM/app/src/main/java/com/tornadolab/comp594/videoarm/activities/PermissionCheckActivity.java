@@ -8,6 +8,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -32,6 +33,14 @@ public class PermissionCheckActivity extends Activity {
 
             @Override
             public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (String deniedString : deniedPermissions) {
+                    stringBuilder.append(deniedString);
+                    stringBuilder.append("\n");
+                }
+
+                stringBuilder.append("Permission denied");
+                Toast.makeText(PermissionCheckActivity.this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         };
