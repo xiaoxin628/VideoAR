@@ -9,6 +9,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#cfcfcf"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="@string/maxstar_samples"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:focusable="true"
+                android:text="Resolution Settings" />
+        </FrameLayout>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -67,7 +67,11 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 			case 2:
 				resultCode = CameraDevice.getInstance().start(0, 1920, 1080);
 				break;
+			case 3:
+				resultCode = CameraDevice.getInstance().start(0, 1920, 1080);
+				break;
 		}
+
 
 		if (resultCode != ResultCode.Success) {
 			Toast.makeText(this, R.string.camera_open_fail, Toast.LENGTH_SHORT).show();

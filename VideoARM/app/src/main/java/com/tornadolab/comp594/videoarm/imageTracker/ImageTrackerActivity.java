@@ -7,6 +7,7 @@ package com.tornadolab.comp594.videoarm.imageTracker;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -60,6 +61,17 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		TrackerManager.getInstance().addTrackerData("ImageTarget/matchbox_side.2dmap", true);
 
 		TrackerManager.getInstance().addTrackerData("ImageTarget/cap_circle.2dmap", true);
+
+
+
+		//Letters test
+		TrackerManager.getInstance().addTrackerData("ImageTarget/MaxstAR\\Test\\AB.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/MaxstAR\\Test\\OO.2dmap", true);
+		//Texture test
+		TrackerManager.getInstance().addTrackerData("ImageTarget/test/MaxstAR\\Test\\random_dots.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/test/MaxstAR\\Test\\random_lines_bold.2dmap", true);
+		TrackerManager.getInstance().addTrackerData("ImageTarget/test/MaxstAR\\Test\\random_lines_dots.2dmap", true);
+
 		TrackerManager.getInstance().loadTrackerData();
 		TrackerManager.getInstance().setTrackingOption(TrackerManager.TrackingOption.EXTENDED_TRACKING);
 
@@ -86,6 +98,11 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 			case 2:
 				resultCode = CameraDevice.getInstance().start(0, 1920, 1080);
 				break;
+			case 3:
+				// start with 4k
+				resultCode = CameraDevice.getInstance().start(0, 3840, 2160);
+				Log.d("ImageTrackerActivity", " resultCode:"+resultCode.toString());
+				break;
 		}
 
 		if (resultCode != ResultCode.Success) {
@@ -94,12 +111,14 @@ public class ImageTrackerActivity extends ARActivity implements View.OnClickList
 		}
 
 		MaxstAR.onResume();
+//		CameraDevice mCameraDevice = CameraDevice.getInstance();
+//		Log.d("ImageTrackerActivity", "Resolution :"+mCameraDevice.getParamList().toString());
+//		Log.d("ImageTrackerActivity", "Resolution :"+mCameraDevice.getParamList().indexOf("picture-size-values"));
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		glSurfaceView.queueEvent(new Runnable() {
 			@Override
 			public void run() {

@@ -116,7 +116,7 @@ class InstantTrackerRenderer implements Renderer {
 //		player.openVideo("movies/stitch_walk.mp4");
 //		player.openVideo("movies/IMG_0106.mp4");
 //		player.openVideo("movies/IMG_0105.mp4");
-		player.openVideo("movies/demo_me_walking_output.mp4");
+		player.openVideo("movies/bg_sub.mp4");
 	}
 
 	void setTranslate(float x, float y) {

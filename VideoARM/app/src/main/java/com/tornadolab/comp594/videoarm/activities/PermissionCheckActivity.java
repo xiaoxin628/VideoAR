@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -45,7 +46,7 @@ public class PermissionCheckActivity extends Activity {
             }
         };
 
-        new TedPermission(this)
+        TedPermission.with(this)
                 .setPermissionListener(permissionlistener)
                 .setPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();

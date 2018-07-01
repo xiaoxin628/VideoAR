@@ -73,7 +73,7 @@ class ImageTrackerRenderer implements Renderer {
 		mShaperVideoQuad = new ShaperVideoQuad();
 		player = new VideoPlayer(activity);
 		mShaperVideoQuad.setVideoPlayer(player);
-		player.openVideo("movies/demo.mp4");
+		player.openVideo("movies/roundDoor.mp4");
 
         mCubeVideoQuad = new CubeVideoQuad();
         player = new VideoPlayer(activity);
@@ -118,7 +118,12 @@ class ImageTrackerRenderer implements Renderer {
 
 			Log.d(TAG, "trackable Name:"+trackable.getName());
 
-			if (trackable.getName().startsWith("matche_box") || trackable.getName().startsWith("blender_big") || trackable.getName().startsWith("matchbox_side")) {
+			if (trackable.getName().startsWith("matche_box") || trackable.getName().startsWith("blender_big") || trackable.getName().startsWith("matchbox_side") ||
+					trackable.getName().startsWith("AB") ||
+					trackable.getName().startsWith("OO") ||
+					trackable.getName().startsWith("random")
+					) {
+//			if (trackable.getName().equals("cb_square")) {
 				legoDetected = true;
 				if (videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||
 						videoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_PAUSE) {
@@ -150,7 +155,7 @@ class ImageTrackerRenderer implements Renderer {
 				);
 				mShaperVideoQuad.draw();
 
-			} else if (trackable.getName().equals("cb_square")) {
+			} else if (trackable.getName().equals("cb_square")) {//debug
 
                 legoDetected = true;
                 if (mCubeVideoQuad.getVideoPlayer().getState() == VideoPlayer.STATE_READY ||

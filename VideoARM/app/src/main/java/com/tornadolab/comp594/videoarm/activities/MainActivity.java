@@ -1,7 +1,7 @@
 package com.tornadolab.comp594.videoarm.activities;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,7 +9,7 @@ import com.tornadolab.comp594.videoarm.R;
 import com.tornadolab.comp594.videoarm.imageTracker.ImageTrackerActivity;
 import com.tornadolab.comp594.videoarm.instantTracker.InstantTrackerActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends Activity implements View.OnClickListener{
 
 //    // Used to load the 'native-lib' library on application startup.
 //    static {
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.button_mode_one).setOnClickListener(this);
         findViewById(R.id.button_mode_three).setOnClickListener(this);
+        findViewById(R.id.settings).setOnClickListener(this);
 
     }
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_mode_three:
                 startActivity(new Intent(MainActivity.this, InstantTrackerActivity.class));
                 break;
+            case R.id.settings:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 
         }
     }
